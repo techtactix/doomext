@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mindful Browser Options</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            color: #333;
+        }
+        h1 {
+            color: #2196F3;
+        }
+        .option-group {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        .option-group h2 {
+            margin-top: 0;
+        }
+        .option {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .option label {
+            margin-left: 10px;
+            flex-grow: 1;
+        }
+        .option-description {
+            margin-left: 25px;
+            font-size: 14px;
+            color: #666;
+        }
+        button {
+            background: #2196F3;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #1976D2;
+        }
+    </style>
+</head>
+<body>
+    <h1>Mindful Browser Options</h1>
+    
+    <div class="option-group">
+        <h2>Doomscrolling Detection</h2>
+        <div class="option">
+            <input type="checkbox" id="doomscrollingEnabled" checked>
+            <label for="doomscrollingEnabled">Enable Doomscrolling Detection</label>
+        </div>
+        <div class="option-description">
+            Monitors your scrolling behavior and alerts you when you might be doomscrolling.
+        </div>
+        
+        <div class="option">
+            <label for="sensitivity">Sensitivity:</label>
+            <select id="sensitivity">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+            </select>
+        </div>
+        <div class="option-description">
+            Adjust how sensitive the doomscrolling detection is.
+        </div>
+    </div>
+    
+    <div class="option-group">
+        <h2>YouTube Focus Mode</h2>
+        <div class="option">
+            <input type="checkbox" id="focusModeEnabled">
+            <label for="focusModeEnabled">Enable YouTube Focus Mode</label>
+        </div>
+        <div class="option-description">
+            Filters out clickbait and irrelevant content on YouTube.
+        </div>
+        
+        <div class="option">
+            <label for="filterStrength">Filter Strength:</label>
+            <select id="filterStrength">
+                <option value="light">Light</option>
+                <option value="medium" selected>Medium</option>
+                <option value="aggressive">Aggressive</option>
+            </select>
+        </div>
+        <div class="option-description">
+            Adjust how aggressively the extension filters content.
+        </div>
+    </div>
+    
+    <button id="saveButton">Save Options</button>
+    
+    <script src="options.js"></script>
+</body>
+</html> 

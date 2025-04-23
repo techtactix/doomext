@@ -1,0 +1,1 @@
+chrome.runtime.onInstalled.addListener((()=>{console.log("Mindful Browser extension installed"),chrome.storage.sync.set({doomscrollingEnabled:!0,focusModeEnabled:!1})})),chrome.runtime.onMessage.addListener(((e,o,n)=>{if("getSettings"===e.action)return chrome.storage.sync.get(["doomscrollingEnabled","focusModeEnabled"],(e=>{n(e)})),!0}));

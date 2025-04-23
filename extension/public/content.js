@@ -1,0 +1,1 @@
+console.log("Mindful Browser content script loaded");

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mindful Browser</title>
+    <style>
+        body {
+            width: 300px;
+            padding: 15px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #ffffff;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .feature {
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
+        .feature-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 40px;
+            height: 20px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 20px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2196F3;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+        h2 {
+            margin: 0 0 15px 0;
+            color: #333;
+            font-size: 18px;
+        }
+        .feature-title {
+            color: #333;
+            font-weight: 500;
+        }
+        .status {
+            font-size: 12px;
+            color: #666;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Mindful Browser</h2>
+        
+        <div class="feature">
+            <div class="feature-header">
+                <div class="feature-title">Doomscrolling Detection</div>
+                <label class="switch">
+                    <input type="checkbox" id="doomscrollingToggle" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="status">Monitors and alerts you about excessive scrolling</div>
+        </div>
+
+        <div class="feature">
+            <div class="feature-header">
+                <div class="feature-title">YouTube Focus Mode</div>
+                <label class="switch">
+                    <input type="checkbox" id="focusModeToggle">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            <div class="status">Filters out clickbait and irrelevant content</div>
+        </div>
+    </div>
+
+    <script src="popup.js"></script>
+</body>
+</html> 
