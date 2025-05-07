@@ -8,12 +8,16 @@ class MindfulBrowsing {
     private isDoomscrolling: boolean;
     private focusMode: boolean;
     private lastReminderTime: number;
-    private readonly REMINDER_COOLDOWN = 15000000;
-    private readonly SCROLL_THRESHOLD = 10000;
-    private readonly TIME_THRESHOLD = 2000000;
-    private readonly RAPID_SCROLL_THRESHOLD = 100000;
+    private readonly REMINDER_COOLDOWN = 600000; // 10 minutes between reminders
+    private readonly SCROLL_THRESHOLD = 100; // Number of scroll events
+    private readonly TIME_THRESHOLD = 30000; // 2 minute time window
+    private readonly RAPID_SCROLL_THRESHOLD = 800; // Rapid scroll detection (pixels)
+    private readonly SCROLL_RESET_TIME = 15000; // Reset after 15 seconds of no scrolling
+    private readonly REMINDER_DELAY = 1000; // 8 second delay before showing reminder
     private isShorts: boolean = false;
     private youtubeModifier: YouTubeModifier;
+    private scrollTimer: number | null = null;
+    private reminderTimer: number | null = null;
 
     constructor() {
         console.log('MindfulBrowsing: Initializing...');
@@ -60,17 +64,37 @@ class MindfulBrowsing {
         this.scrollStartTime = Date.now();
         this.isDoomscrolling = false;
         this.lastScrollPosition = window.scrollY;
+        
+        // Clear any existing timers
+        if (this.scrollTimer) {
+            clearTimeout(this.scrollTimer);
+            this.scrollTimer = null;
+        }
+        
+        if (this.reminderTimer) {
+            clearTimeout(this.reminderTimer);
+            this.reminderTimer = null;
+        }
     }
 
     async handleScroll(): Promise<void> {
+        // Clear any existing timers
+        if (this.scrollTimer) {
+            clearTimeout(this.scrollTimer);
+        }
+        
         const currentTime = Date.now();
         const timeSpent = currentTime - this.scrollStartTime;
         const scrollDelta = Math.abs(window.scrollY - this.lastScrollPosition);
         
-        this.scrollCount++;
+        // Only count significant scrolls (more than 50 pixels)
+        if (scrollDelta > 50) {
+            this.scrollCount++;
+            console.log(`MindfulBrowsing: Scroll count: ${this.scrollCount}`);
+        }
         this.lastScrollPosition = window.scrollY;
 
-        // Detect rapid scrolling
+        // Detect rapid scrolling (more than 500 pixels in less than 1 second)
         if (scrollDelta > this.RAPID_SCROLL_THRESHOLD && timeSpent < 1000) {
             this.scrollCount += 2;
             console.log('MindfulBrowsing: Rapid scroll detected');
@@ -84,14 +108,22 @@ class MindfulBrowsing {
             console.log('MindfulBrowsing: Doomscrolling detected!');
             this.isDoomscrolling = true;
             this.lastReminderTime = currentTime;
-            this.showDoomscrollingReminder();
+            
+            // Add 5 second delay before showing reminder
+            if (this.reminderTimer) {
+                clearTimeout(this.reminderTimer);
+            }
+            
+            this.reminderTimer = window.setTimeout(() => {
+                this.showDoomscrollingReminder();
+            }, this.REMINDER_DELAY);
         }
 
-        // Reset counters if user hasn't scrolled for 5 seconds
-        if (timeSpent > 5000) {
+        // Reset counters if user hasn't scrolled for 10 seconds
+        this.scrollTimer = window.setTimeout(() => {
             console.log('MindfulBrowsing: Resetting counters');
             this.resetScrollTracking();
-        }
+        }, this.SCROLL_RESET_TIME);
     }
 
     showDoomscrollingReminder(): void {
@@ -181,7 +213,8 @@ class MindfulBrowsing {
         const [takeBreakBtn, continueBtn] = buttons;
         takeBreakBtn.onclick = () => {
             reminder.remove();
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+            // Close the current tab instead of scrolling to top
+            chrome.runtime.sendMessage({ action: 'closeCurrentTab' });
         };
         continueBtn.onclick = () => reminder.remove();
 

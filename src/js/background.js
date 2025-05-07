@@ -19,4 +19,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     });
     return true; // Required for async response
   }
+  
+  // Handle request to close current tab
+  if (request.action === 'closeCurrentTab' && sender.tab && sender.tab.id) {
+    chrome.tabs.remove(sender.tab.id);
+  }
 }); 
